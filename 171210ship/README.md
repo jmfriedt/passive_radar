@@ -8,3 +8,8 @@ circle) to become visible, otherwise hidden in the sidelobes.
 
 <img src="0123_2.png">
 <img src="0123_dsi_2.png">
+
+Movie of a 5.8 GB dataset processed without DSI removal (top) and with DSI removal (bottom)
+
+<img src="animation_nodsi.gif">
+<img src="animation_dsi.gif">
