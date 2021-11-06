@@ -7,3 +7,6 @@ and the other Yagi-Uda antenna facing the target. The samples are collected as i
 complex floating point numbers.
 
 <img src="DSC07752small.jpg">
+
+See [the 2018 FOSDEM presentation](https://archive.fosdem.org/2018/schedule/event/passiveradar/) 
+for a description of the experiment
