@@ -20,7 +20,10 @@ float, two complex channels the datarate is 38.4 MB/s or 2.3 GB/minute. Post-pro
 running the cross-correlation between both channels for all possible frequency offsets introduced
 by moving targets.
 
+<img src="dual_rtl_sdr.png">
+
 In case multiple azimuths are considered, the dataflow must *never* between acquisitions or
 a random delay from the USB bus will be introduced from one acquisition to the next. The 0MQ
 Publish/Subscribe mechanism allows for continuously running the RTL-SDR stream while connecting
 the subscribe source to a file only when the new azimuth has stabilized.
+
