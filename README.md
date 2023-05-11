@@ -4,7 +4,9 @@ Passive radar measurements using synchronized RTL-SDR DVB-T receivers
 Two DVB-T receivers were clocked from the same reference and data collected at
 2.048 MS/s with one antenna facing the reference signal of a DVB-T emitter in Sendai, Japan,
 and the other Yagi-Uda antenna facing the target. The samples are collected as interleaved
-complex floating point numbers.
+8-bit integers (char) for saving space. The data are made available at 
+https://www.iqengine.org under GNU Radio SigMF Repo -> Passive Radar (both channels split in
+two files during post-processing although initially saved as a single interleaved file).
 
 <img src="DSC07752small.jpg">
 
@@ -26,4 +28,3 @@ In case multiple azimuths are considered, the dataflow must *never* between acqu
 a random delay from the USB bus will be introduced from one acquisition to the next. The 0MQ
 Publish/Subscribe mechanism allows for continuously running the RTL-SDR stream while connecting
 the subscribe source to a file only when the new azimuth has stabilized.
-
