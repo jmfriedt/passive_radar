@@ -1,5 +1,5 @@
 pkg load signal
-save_picts=0;             % set to 1 to save output images
+save_picts=1;             % set to 1 to save output images
 % f=fopen('ship4char_mountain.bin','rb');
 f1=fopen('171210ship_ch1.sigmf-data','rb');
 f2=fopen('171210ship_ch2.sigmf-data','rb');
