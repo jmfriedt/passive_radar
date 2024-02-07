@@ -28,3 +28,5 @@ In case multiple azimuths are considered, the dataflow must *never* between acqu
 a random delay from the USB bus will be introduced from one acquisition to the next. The 0MQ
 Publish/Subscribe mechanism allows for continuously running the RTL-SDR stream while connecting
 the subscribe source to a file only when the new azimuth has stabilized.
+
+See W. Feng, J.-M Friedt, G. Cherniak, M. Sato, *Passive bistatic radar using DVB-T receivers as general-purpose software-deﬁned radio receivers* , Rev. Sci. Instrum. vol.89, 104701 (Sept. 2018) at http://jmfriedt.free.fr/dvbt_hardware.pdf for a detailed description of the setup.
