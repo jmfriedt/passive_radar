@@ -24,7 +24,7 @@ by moving targets.
 
 <img src="dual_rtl_sdr.png">
 
-In case multiple azimuths are considered, the dataflow must *never* between acquisitions or
+In case multiple azimuths are considered, the dataflow must *never* stop between acquisitions or
 a random delay from the USB bus will be introduced from one acquisition to the next. The 0MQ
 Publish/Subscribe mechanism allows for continuously running the RTL-SDR stream while connecting
 the subscribe source to a file only when the new azimuth has stabilized.
