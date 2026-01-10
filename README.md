@@ -1,5 +1,6 @@
-# passive_radar
-Passive radar measurements using synchronized RTL-SDR DVB-T receivers
+# Passive radar measurements using synchronized RTL-SDR DVB-T receivers
+
+## Ships
 
 Two DVB-T receivers were clocked from the same reference and data collected at
 2.048 MS/s with one antenna facing the reference signal of a DVB-T emitter in Sendai, Japan,
@@ -13,7 +14,7 @@ two files during post-processing although initially saved as a single interleave
 See [the 2018 FOSDEM presentation](https://archive.fosdem.org/2018/schedule/event/passiveradar/) 
 for a description of the experiment
 
-# GNU Radio flowchart
+## GNU Radio flowchart
 
 The GNU Radio flowchart is limited to two RTL-SDR sources provided by the OsmoSDR Source 
 (``gr-osmosdr`` package in Debian GNU/Linux) whose output is interleaved and stored in a
