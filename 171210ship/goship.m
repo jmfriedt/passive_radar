@@ -5,67 +5,79 @@ f1=fopen('171210ship_ch1.sigmf-data','rb');
 f2=fopen('171210ship_ch2.sigmf-data','rb');
 p=1;
 fs=2.048e6;               % sampling frequency
+dN=512;                   % correlation range search
 N=fs;                     % 1 second worth of data
 tim=[0:1/fs:(N/2-1)/fs]'; % discretized time
 freq=[-200:4:200];        % Doppler shift
 dsi_suppression=0         % option to activate Direct Signal Interference removal
 
-t=fread(f1,[2, N/2],'char');
-v=t(1,:)+t(2,:)*i;
-[r,c]=size(v);
-ref=reshape(v,c,r);
+if (dsi_suppression==1)
+  scf=0.05;               % colormap scale factor
+else
+  scf=0.01;
+end
 
-t=fread(f2,[2, N/2],'char');
-v=t(1,:)+t(2,:)*i;
-[r,c]=size(v);
-mes=reshape(v,c,r);
+t=fread(f1,N,'int8');
+ref=t(1:2:end)+j*t(2:2:end);
 
-xc=abs(xcorr(ref,mes));
+t=fread(f2,N,'int8');
+mes=t(1:2:end)+j*t(2:2:end);
+
+xc=abs(xcorr(ref,mes));     % measure time offsets between RTL-SDR receivers (USB bus delay)
 [val,pos]=max(xc);
-pos=length(ref)-pos
+pos=length(ref)-pos       % position max wrt cross-correlation origin
 
-if (pos>0)                % which channel is reference and which is measurement?
+if (pos>0)                  % which channel is reference and which is measurement?
     mes=mes(pos:end);
     ref=ref(1:end-pos);
     xc=abs(xcorr(ref,mes));
     [val,posn]=max(xc);
-    length(ref)-posn
+    length(ref)-posn        % chech that xcorr max position is @ 0
     tim=tim(1:end-pos+1);
 else
     ref=ref(-pos:end);
     mes=mes(1:end+pos);
     xc=abs(xcorr(ref,mes));
     [val,posn]=max(xc);
-    length(ref)-posn
+    length(ref)-posn        % chech that xcorr max position is @ 0
     tim=tim(1:end+pos+1);
 end
 
-for k=1:1008
-  t=fread(f1,[2, N/2],'char');
-  t=fread(f2,[2, N/2],'char');
-  p=p+1
-end
+fseek(f1,1008*N);           % skip beginning lacking interesting targets
+fseek(f2,1008*N);
+%for k=1:1008
+%  t=fread(f1,[2, N/2],'char');
+%  t=fread(f2,[2, N/2],'char');
+%  p=p+1
+%end
+
+%if (pos>0)                  % align by reading from the appropriate file
+%   fread(f2,abs(pos)*2,'int8');
+%else
+%   fread(f1,abs(pos)*2,'int8');
+%end
 
 for k=1:N:19227738112/4
   p
-  t=fread(f1,[2, N/2],'char');
-  v=t(1,:)+t(2,:)*i;
-  [r,c]=size(v);
-  ref=reshape(v,c,r);
+  t=fread(f1,N,'int8');
+  ref=t(1:2:end)+j*t(2:2:end);
 
-  t=fread(f2,[2, N/2],'char');
-  v=t(1,:)+t(2,:)*i;
-  [r,c]=size(v);
-  mes=reshape(v,c,r);
+  t=fread(f2,N,'int8');
+  mes=t(1:2:end)+j*t(2:2:end);
 
-  if (pos>0)              % align
+  if (pos>0)                 % align
      mes=mes(pos:end);
      ref=ref(1:end-pos+1);
   else
      ref=ref(-pos:end);
      mes=mes(1:end+pos+1);
   end
-  m=1;
+  if (p==1)
+    figure
+    plot(([-length(ref)+1:length(ref)-1])*3E8/fs/1000,abs(xcorr(ref,mes)))
+    xlim([-20 20]);xlabel('range (km)');ylabel('xcorr (a.u.)');text(10,6e8,'future');text(-10,6e8,'past');
+    figure
+  end
 
   if (dsi_suppression==1)
       nt=length(ref);
@@ -82,23 +94,18 @@ for k=1:N:19227738112/4
               X1(:,te)=[zeros(kk-1,1);ref(1:end-kk+1)];
           end
       end
-      % Least Square optimization
-      mes=mes-X1*(pinv(X1)*mes);
+      mes=mes-X1*(pinv(X1)*mes); % Least Square optimization
       clear X1;
   end
 
   m=1;
   for fd=freq
      mesdop=mes.*exp(j*2*pi*fd*tim);
-     x=abs(xcorr(ref,mesdop,2048));
-     rangedop(:,m)=x(2048-20:2048+150-20);
+     x=abs(xcorr(ref,mesdop,dN));
+     rangedop(:,m)=x(dN-15:dN+150);
      m=m+1;
-  end
-  if (dsi_suppression==1)
-    imagesc(freq,([-20:+150+20])*3e8/fs/2/1000,fliplr(flipud(rangedop)),[0 0.05*max(max(rangedop))]);
-  else
-    imagesc(freq,([-20:+150+20])*3e8/fs/2/1000,fliplr(flipud(rangedop)),[0 0.01*max(max(rangedop))]);
-  end
+  end          % vvv flipud => reverse Y axis wrt rangedop
+  imagesc(freq,([-150:+15]+1)*3e8/fs/2/1000,fliplr(flipud(rangedop)),[0 scf*max(max(rangedop))]);
   xlabel('Doppler shift (Hz)')
   ylabel('range (km)')
   temps=p/2;
