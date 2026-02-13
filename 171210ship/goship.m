@@ -61,8 +61,12 @@ end
 %end
 
 filesize=stat(f1).size;
-eval(["tmp=",datatype,"(3);"]);
-datasize=sizeof(tmp);
+if (strcmp(datatype,'float')==0)  % round to integer values
+  eval(["tmp=",datatype,"(3);"]);
+  datasize=sizeof(tmp);
+else
+  datasize=4;
+end
 p=1;
 for k=1:N:filesize/datasize/2 % 19227738112/4
   p
