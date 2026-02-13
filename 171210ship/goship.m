@@ -6,8 +6,8 @@ f2=fopen('171210ship_ch2.sigmf-data','rb');
 p=1;
 fs=2.048e6;               % sampling frequency
 dN=512;                   % correlation range search
-N=fs;                     % 1 second worth of data
-tim=[0:1/fs:(N/2-1)/fs]'; % discretized time
+N=fs;                     % 0.5 second worth of data
+tim=[0:(N/2-1)]/fs'; % discretized time
 freq=[-200:4:200];        % Doppler shift
 dsi_suppression=0         % option to activate Direct Signal Interference removal
 
@@ -40,7 +40,7 @@ else
     xc=abs(xcorr(ref,mes));
     [val,posn]=max(xc);
     length(ref)-posn      % chech that xcorr max position is @ 0
-    tim=tim(1:end+pos+1);
+    tim=tim(1:end+pos);
 end
 
 fseek(f1,1008*N);         % skip beginning lacking interesting targets
