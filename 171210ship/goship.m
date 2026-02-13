@@ -3,6 +3,7 @@ save_picts=1;             % set to 1 to save output images
 % f=fopen('ship4char_mountain.bin','rb');
 f1=fopen('171210ship_ch1.sigmf-data','rb');
 f2=fopen('171210ship_ch2.sigmf-data','rb');
+datatype='int8';
 p=1;
 fs=2.048e6;               % sampling frequency
 dN=512;                   % correlation range search
@@ -17,10 +18,10 @@ else
   scf=0.01;
 end
 
-t=fread(f1,N,'int8');
+t=fread(f1,N,datatype);
 ref=t(1:2:end)+j*t(2:2:end);
 
-t=fread(f2,N,'int8');
+t=fread(f2,N,datatype;
 mes=t(1:2:end)+j*t(2:2:end);
 
 xc=abs(xcorr(ref,mes));   % measure time offsets between RTL-SDR receivers (USB bus delay)
@@ -52,17 +53,20 @@ fseek(f2,1008*N);
 %end
 
 %if (pos>0)               % align by reading from the appropriate file
-%   fread(f2,abs(pos)*2,'int8');
+%   fread(f2,abs(pos)*2,datatype);
 %else
-%   fread(f1,abs(pos)*2,'int8');
+%   fread(f1,abs(pos)*2,datatype);
 %end
 
-for k=1:N:19227738112/4
+filesize=stat(f1).size;
+eval(["tmp=",datatype,"(3)"]);
+datasize=sizeof(a);
+for k=1:N:filesize/datasize/2 % 19227738112/4
   p
-  t=fread(f1,N,'int8');
+  t=fread(f1,N,datatype);
   ref=t(1:2:end)+j*t(2:2:end);
 
-  t=fread(f2,N,'int8');
+  t=fread(f2,N,datatype);
   mes=t(1:2:end)+j*t(2:2:end);
 
   if (pos>0)              % align
@@ -70,7 +74,7 @@ for k=1:N:19227738112/4
      ref=ref(1:end-pos+1);
   else
      ref=ref(-pos+1:end);
-     mes=mes(1:end+pos+1);
+     mes=mes(1:end+pos);
   end
   if (p==1)
     figure
