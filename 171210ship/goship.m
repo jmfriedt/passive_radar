@@ -9,12 +9,10 @@ else
   f1=fopen('171210ship_ch1.sigmf-data','rb');
   f2=fopen('171210ship_ch2.sigmf-data','rb');
 end
-datatype='int8';          % can be int8, int16, int32 or float
-p=1;
+datatype='int8'           % can be int8, int16, int32 or float
 fs=2.048e6;               % sampling frequency
 dN=512;                   % correlation range search
 N=fs;                     % 0.5 second worth of data
-tim=[0:(N/2-1)]'/fs;      % discretized time
 freq=[-200:4:200];        % Doppler shift
 dsi_suppression=0         % option to activate Direct Signal Interference removal
 
@@ -34,6 +32,7 @@ xc=abs(xcorr(ref,mes));   % measure time offsets between RTL-SDR receivers (USB 
 [val,pos]=max(xc);
 pos=length(ref)-pos       % position max wrt cross-correlation origin
 
+tim=[0:(N/2-1)]'/fs;      % discretized time
 if (pos>0)                % which channel is reference and which is measurement?
     mes=mes(pos:end);
     ref=ref(1:end-pos);
@@ -54,11 +53,6 @@ if ~(exist('simulated'))
   fseek(f1,1008*N);         % skip beginning lacking interesting targets
   fseek(f2,1008*N);
 end
-%for k=1:1008
-%  t=fread(f1,[2, N/2],'char');
-%  t=fread(f2,[2, N/2],'char');
-%  p=p+1
-%end
 
 %if (pos>0)               % align by reading from the appropriate file
 %   fread(f2,abs(pos)*2,datatype);
@@ -67,8 +61,9 @@ end
 %end
 
 filesize=stat(f1).size;
-eval(["tmp=",datatype,"(3)"]);
+eval(["tmp=",datatype,"(3);"]);
 datasize=sizeof(tmp);
+p=1;
 for k=1:N:filesize/datasize/2 % 19227738112/4
   p
   t=fread(f1,N,datatype);
