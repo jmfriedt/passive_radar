@@ -14,7 +14,7 @@ p=1;
 fs=2.048e6;               % sampling frequency
 dN=512;                   % correlation range search
 N=fs;                     % 0.5 second worth of data
-tim=[0:(N/2-1)]/fs'; % discretized time
+tim=[0:(N/2-1)]'/fs;      % discretized time
 freq=[-200:4:200];        % Doppler shift
 dsi_suppression=0         % option to activate Direct Signal Interference removal
 
