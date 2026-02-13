@@ -1,8 +1,8 @@
 pkg load signal
 save_picts=1;             % set to 1 to save output images
 % f=fopen('ship4char_mountain.bin','rb');
-% simulation=1;
-if exist('simulation')
+% simulated=1;            % simulated dataset generated with simulation.m
+if exist('simulated')
   f1=fopen('simulation_ref.bin','rb');
   f2=fopen('simulation_sur.bin','rb');
 else
@@ -50,8 +50,10 @@ else
     tim=tim(1:end+pos);
 end
 
-fseek(f1,1008*N);         % skip beginning lacking interesting targets
-fseek(f2,1008*N);
+if ~(exist('simulated'))
+  fseek(f1,1008*N);         % skip beginning lacking interesting targets
+  fseek(f2,1008*N);
+end
 %for k=1:1008
 %  t=fread(f1,[2, N/2],'char');
 %  t=fread(f2,[2, N/2],'char');
@@ -131,5 +133,7 @@ for k=1:N:filesize/datasize/2 % 19227738112/4
 end
 % r=linspace(0,67/2.048*300/2,67)
 % xx=x(2048+160:2048+226,:);
-r=linspace(0,157/2.048*300/2,157)
-xx=x(2048+450:2048+606,:);
+if ~(exist('simulated'))
+  r=linspace(0,157/2.048*300/2,157)
+  xx=x(2048+450:2048+606,:);
+end

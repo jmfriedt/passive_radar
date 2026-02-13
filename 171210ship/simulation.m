@@ -1,0 +1,9 @@
+fs=2e6;
+ref=randn(4*fs,1);
+tim=[0:length(ref)-1]'/fs;
+lo=exp(j*2*pi*50*tim);
+sur=ref+ref.*lo;
+sur=round(sur/max(abs(sur))*127);
+ref=round(ref/max(abs(ref))*127);
+f=fopen('simulation_ref.bin','wb');fwrite(f,ref,'int8');fclose(f);
+f=fopen('simulation_sur.bin','wb');fwrite(f,sur,'int8');fclose(f);
