@@ -1,8 +1,14 @@
 pkg load signal
 save_picts=1;             % set to 1 to save output images
 % f=fopen('ship4char_mountain.bin','rb');
-f1=fopen('171210ship_ch1.sigmf-data','rb');
-f2=fopen('171210ship_ch2.sigmf-data','rb');
+% simulation=1;
+if exist('simulation')
+  f1=fopen('simulation_ref.bin','rb');
+  f2=fopen('simulation_sur.bin','rb');
+else
+  f1=fopen('171210ship_ch1.sigmf-data','rb');
+  f2=fopen('171210ship_ch2.sigmf-data','rb');
+end
 datatype='int8';          % can be int8, int16, int32 or float
 p=1;
 fs=2.048e6;               % sampling frequency
@@ -21,7 +27,7 @@ end
 t=fread(f1,N,datatype);
 ref=t(1:2:end)+j*t(2:2:end);
 
-t=fread(f2,N,datatype;
+t=fread(f2,N,datatype);
 mes=t(1:2:end)+j*t(2:2:end);
 
 xc=abs(xcorr(ref,mes));   % measure time offsets between RTL-SDR receivers (USB bus delay)
@@ -60,7 +66,7 @@ fseek(f2,1008*N);
 
 filesize=stat(f1).size;
 eval(["tmp=",datatype,"(3)"]);
-datasize=sizeof(a);
+datasize=sizeof(tmp);
 for k=1:N:filesize/datasize/2 % 19227738112/4
   p
   t=fread(f1,N,datatype);
