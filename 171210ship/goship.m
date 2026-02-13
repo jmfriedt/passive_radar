@@ -23,27 +23,27 @@ ref=t(1:2:end)+j*t(2:2:end);
 t=fread(f2,N,'int8');
 mes=t(1:2:end)+j*t(2:2:end);
 
-xc=abs(xcorr(ref,mes));     % measure time offsets between RTL-SDR receivers (USB bus delay)
+xc=abs(xcorr(ref,mes));   % measure time offsets between RTL-SDR receivers (USB bus delay)
 [val,pos]=max(xc);
 pos=length(ref)-pos       % position max wrt cross-correlation origin
 
-if (pos>0)                  % which channel is reference and which is measurement?
+if (pos>0)                % which channel is reference and which is measurement?
     mes=mes(pos:end);
     ref=ref(1:end-pos);
     xc=abs(xcorr(ref,mes));
     [val,posn]=max(xc);
-    length(ref)-posn        % chech that xcorr max position is @ 0
+    length(ref)-posn      % chech that xcorr max position is @ 0
     tim=tim(1:end-pos+1);
 else
-    ref=ref(-pos:end);
+    ref=ref(-pos+1:end);  % +1 in case pos==0 (for B210)
     mes=mes(1:end+pos);
     xc=abs(xcorr(ref,mes));
     [val,posn]=max(xc);
-    length(ref)-posn        % chech that xcorr max position is @ 0
+    length(ref)-posn      % chech that xcorr max position is @ 0
     tim=tim(1:end+pos+1);
 end
 
-fseek(f1,1008*N);           % skip beginning lacking interesting targets
+fseek(f1,1008*N);         % skip beginning lacking interesting targets
 fseek(f2,1008*N);
 %for k=1:1008
 %  t=fread(f1,[2, N/2],'char');
@@ -51,7 +51,7 @@ fseek(f2,1008*N);
 %  p=p+1
 %end
 
-%if (pos>0)                  % align by reading from the appropriate file
+%if (pos>0)               % align by reading from the appropriate file
 %   fread(f2,abs(pos)*2,'int8');
 %else
 %   fread(f1,abs(pos)*2,'int8');
@@ -65,11 +65,11 @@ for k=1:N:19227738112/4
   t=fread(f2,N,'int8');
   mes=t(1:2:end)+j*t(2:2:end);
 
-  if (pos>0)                 % align
+  if (pos>0)              % align
      mes=mes(pos:end);
      ref=ref(1:end-pos+1);
   else
-     ref=ref(-pos:end);
+     ref=ref(-pos+1:end);
      mes=mes(1:end+pos+1);
   end
   if (p==1)
