@@ -35,7 +35,7 @@ simulated data, uncomment the ``simulated=1;`` line in the ``goship.m``
 processing software to select the right filenames and avoid skipping the
 beginning of the dataset.
 
-The ``goship.m`` can be tuned for various input formats: change the ``
+The ``goship.m`` can be tuned for various input formats: change the
 ``datatype='int8'`` line to int16, int32 or float accordingly. For sampled
 data, make sure to set the sampling rate accordingly with ``fs=2.048e6;``.
 The Doppler shift range ``freq=[-200:4:200];`` is a tradeoff between fine
