@@ -68,7 +68,7 @@ else
   datasize=4;
 end
 p=1;
-for k=1:N:filesize/datasize/2 % 19227738112/4
+for k=1:N:filesize/datasize       % 19227738112/4
   p
   t=fread(f1,N,datatype);
   ref=t(1:2:end)+j*t(2:2:end);
