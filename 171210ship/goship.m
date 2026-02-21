@@ -15,6 +15,8 @@ dN=512;                   % correlation range search
 N=fs;                     % 0.5 second worth of data
 freq=[-200:4:200];        % Doppler shift
 dsi_suppression=0         % option to activate Direct Signal Interference removal
+maxdist=210
+negdist=15
 
 if (dsi_suppression==1)
   scf=0.05;               % colormap scale factor
@@ -114,10 +116,10 @@ for k=1:N:filesize/datasize       % 19227738112/4
     for fd=freq
        mesdop=mes.*exp(j*2*pi*fd*tim);
        x=abs(xcorr(ref,mesdop,dN));
-       rangedop(:,m)=x(dN-15:dN+150);
+       rangedop(:,m)=x(dN-negdist:dN+maxdist);
        m=m+1;
     end          % vvv flipud => reverse Y axis wrt rangedop
-    imagesc(freq,([-150:+15]+1)*3e8/fs/2/1000,fliplr(flipud(rangedop)),[0 scf*max(max(rangedop))]);
+    imagesc(freq,([-maxdist:negdist]+1)*3e8/fs/2/1000,fliplr(flipud(rangedop)),[0 scf*max(max(rangedop))]);
     xlabel('Doppler shift (Hz)')
     ylabel('range (km)')
     temps=p/2;
