@@ -1,3 +1,6 @@
+clear all
+close all
+
 pkg load signal
 save_picts=1;             % set to 1 to save output images
 % f=fopen('ship4char_mountain.bin','rb');
